@@ -2,24 +2,20 @@ package omarlee.weathermap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback,OnMapClickListener  {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback,OnMapClickListener,WeatherServiceListener  {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     /**
@@ -28,18 +24,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private boolean mPermissionDenied = false;
     protected GoogleMap mMap;
-    protected LocationRequest mLocationRequest;
-    protected GoogleApiClient mGoogleApiClient;
-    protected Location mLastLocation;
+    protected LatLng  mlocation;
+    private  WeatherService weatherService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       mlocation= new LatLng(32.7767,96.7970);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         // updateValuesFromBundle(savedInstanceState);
         // Create an instance of GoogleAPIClient.
         // buildGoogleApiClient();
@@ -59,18 +56,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        enableMyLocation();
+        //enableMyLocation();
         mMap.setOnMapClickListener(this);
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getAltitude());
-        //mMap.addMarker(new MarkerOptions().position().title("MyLocation"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //mMap.addMarker(new MarkerOptions().position(mlocation).title("MyLocation"));
+       // mMap.moveCamera(CameraUpdateFactory.newLatLng(mlocation));
     }
     @Override
     public void onMapClick(LatLng point) {
-        Log.d("DEBUG","Map clicked [" + point.latitude + " / " + point.longitude + "]");
-        CharSequence text = point.toString();
-        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
+        Log.d("DEBUG","Map clicked [" + mlocation.latitude + " / " + mlocation.longitude + "]");
+        //CharSequence text = point.toString();
+        mlocation=point;
+        weatherService=new WeatherService(this);
+        weatherService.getWeather(mlocation);
+
+
     }
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -119,6 +120,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
+    @Override
+    public void serviceSuccess(WeatherData wd) {
+        Log.d("DEBUG","weather received [" +wd.getWeather()+wd.getTemp()+"]");
+    }
 
-
+    @Override
+    public void serviceFailure(Exception e) {
+        Log.d("DEBUG","weather failed");
+    }
 }
