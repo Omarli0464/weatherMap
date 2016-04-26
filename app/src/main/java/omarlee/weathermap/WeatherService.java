@@ -30,7 +30,7 @@ public class WeatherService {
                 WeatherData weatherData= new WeatherData();
                 Double lat= params[0].latitude;
                 Double lon=  params[0].longitude;
-                String endpoint =String.format("http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&APPID=72a7923f3cb9f652c63d51c9585379b0",lat,lon);
+                String endpoint =String.format("http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&units=imperial&APPID=72a7923f3cb9f652c63d51c9585379b0",lat,lon);
                 try{
                     URL url=  new URL(endpoint);
                     URLConnection connection= url.openConnection();
@@ -44,6 +44,8 @@ public class WeatherService {
                     JSONObject data = new JSONObject(result.toString());
                     weatherData.setTemp(data.optJSONObject("main").optDouble("temp"));
                     weatherData.setWeather(data.optJSONArray("weather").getJSONObject(0).optString("main"));
+                    weatherData.setName(data.optString("name"));
+                    weatherData.setId(data.optJSONArray("weather").getJSONObject(0).optString("icon"));
                     return weatherData;
 
                 }

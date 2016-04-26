@@ -9,11 +9,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback,OnMapClickListener,WeatherServiceListener  {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -26,6 +29,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected GoogleMap mMap;
     protected LatLng  mlocation;
     private  WeatherService weatherService;
+   // protected WeatherData weatherData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //enableMyLocation();
+        enableMyLocation();
         mMap.setOnMapClickListener(this);
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getAltitude());
@@ -65,8 +69,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     @Override
     public void onMapClick(LatLng point) {
-        Log.d("DEBUG","Map clicked [" + mlocation.latitude + " / " + mlocation.longitude + "]");
-        //CharSequence text = point.toString();
+        Log.d("DEBUG","Map clicked [" + mlocation.latitude + " / " + mlocation.longitude+"]");
         mlocation=point;
         weatherService=new WeatherService(this);
         weatherService.getWeather(mlocation);
@@ -122,7 +125,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void serviceSuccess(WeatherData wd) {
-        Log.d("DEBUG","weather received [" +wd.getWeather()+wd.getTemp()+"]");
+          mMap.clear();
+       int resourceId = getResources().getIdentifier("drawable/icon_"+wd.getId(), null, getPackageName());
+        Log.d("DEBUG","id received [" +wd.getId()+"]");
+        mMap.addMarker(new MarkerOptions().position(mlocation).title(wd.getName()+"  "+wd.getWeather()+"    temp:"+wd.getTemp()).icon(BitmapDescriptorFactory.fromResource(resourceId)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mlocation));
+        Log.d("DEBUG","weather received [" +wd.getWeather()+wd.getTemp()+wd.getName()+"]");
     }
 
     @Override
