@@ -4,8 +4,8 @@ A simple weather application using google map from google play service and openw
 
 ##  Example
 
-![alt tag](https://raw.githubusercontent.com/louisli1989/weatherMap/screenshot1.png)
-![alt tag](https://raw.githubusercontent.com/louisli1989/weatherMap/screenshot2.png)
+![alt tag](https://raw.githubusercontent.com/louisli1989/weatherMap/master/screenshot1.png)
+![alt tag](https://raw.githubusercontent.com/louisli1989/weatherMap/master/screenshot2.png)
 
 
 ## API Reference
