@@ -2,10 +2,10 @@
 
 An android Sdk which provide GoolgeMap intergration with openWeather api.
 ## How to import
- First import the AAR file to your project  File->New->New Module->import .Jar/.AAR Package 
- then you need to edit the build.gradle file, add this two line
-  compile project(':weatherSdk')
-  compile 'com.google.android.gms:play-services:8.4.0'
+ First import the weatherSdk.AAR file to your project  File->New->New Module->import .Jar/.AAR Package 
+ then you need to edit the build.gradle file, add this two line<br/>
+  ```compile project(':weatherSdk')```<br/>
+  ```compile 'com.google.android.gms:play-services:8.4.0'```<br/>
   At Last you need change your package name to "omarlee.myweather" so that it can use the Google map api-key
 ## How to use
   this sdk right now provide three functions <br/>
