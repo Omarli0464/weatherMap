@@ -23,7 +23,7 @@ An android Sdk which provide GoolgeMap intergration with openWeather api.
   
   3  **MapsActivity:**  An Map activity which intergrate google map with Weather Data
 
- weather Data type:  
+ weather Data Model:  
    ``` get/set  temp; ```     get/set  location temperature <br/>
     ```get/set  name;  ```    get/set  location name<br/>
   ```  get/set   id; ```      get/set weather icon id<br/>
