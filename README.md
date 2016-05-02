@@ -29,7 +29,7 @@ An android Sdk which provide GoolgeMap intergration with openWeather api.
   ```  get/set   id; ```      get/set weather icon id<br/>
    ``` get/set   weather;```  get/set  weather condtion<br/>
 ## User Example
-First opent the app, will direct user to current location.
+First opent the MapsActivity, will direct user to current location.
 when a user click on the map, it will show a weather icon to that location,  after click the weather icon it will show more weather deatails for that location(Right now only shows **Location name, weather type, and temperature**). 
 The user would be able to interact with the map (zoom, pan, etc),  app work in both portrait and landscape mode.<br/>
 ![alt tag](https://raw.githubusercontent.com/louisli1989/weatherMap/master/screenshot1.png)
